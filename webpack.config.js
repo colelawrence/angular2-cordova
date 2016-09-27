@@ -35,7 +35,7 @@ module.exports = function makeWebpackConfig() {
    */
   if (isProd) {
     config.devtool = 'source-map';
-  } 
+  }
   else if (isTest) {
     config.devtool = 'inline-source-map';
   }
@@ -61,8 +61,7 @@ module.exports = function makeWebpackConfig() {
    * Reference: http://webpack.github.io/docs/configuration.html#output
    */
   config.output = isTest ? {} : {
-    path: root('dist'),
-    publicPath: isProd ? '/' : 'http://localhost:8080/',
+    path: root('www'),
     filename: isProd ? 'js/[name].[hash].js' : 'js/[name].js',
     chunkFilename: isProd ? '[id].[hash].chunk.js' : '[id].chunk.js'
   };
@@ -86,7 +85,7 @@ module.exports = function makeWebpackConfig() {
   if (isTest && !isTestWatch) {
     // awesome-typescript-loader needs to output inlineSourceMap for code coverage to work with source maps.
     atlOptions = 'inlineSourceMap=true&sourceMap=false';
-  } 
+  }
 
   /**
    * Loaders

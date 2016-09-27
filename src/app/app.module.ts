@@ -2,6 +2,7 @@ import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -24,6 +25,7 @@ import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
     AboutComponent
   ],
   providers: [
+    {provide: LocationStrategy, useClass: HashLocationStrategy},
     ApiService
   ],
   bootstrap: [AppComponent]

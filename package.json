@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf node_modules doc dist && npm cache clean",
+    "clean": "rimraf node_modules doc www && npm cache clean",
     "clean-install": "npm run clean && npm install",
     "clean-start": "npm run clean-install && npm start",
     "watch": "webpack --watch --progress --profile",
-    "build": "rimraf dist && webpack --progress --profile --bail",
+    "build": "rimraf www && webpack --progress --profile --bail",
+    "deploy": "npm run build && cordova run android",
     "server": "webpack-dashboard -- webpack-dev-server --inline --port 8080",
     "webdriver-update": "webdriver-manager update",
     "webdriver-start": "webdriver-manager start",
@@ -89,5 +90,16 @@
     "webpack": "^1.12.13",
     "webpack-dashboard": "^0.1.8",
     "webpack-dev-server": "^1.14.1"
-  }
+  },
+  "cordovaPlugins": [
+    "cordova-plugin-device",
+    "cordova-plugin-console",
+    "cordova-plugin-whitelist",
+    "cordova-plugin-splashscreen",
+    "cordova-plugin-statusbar",
+    "ionic-plugin-keyboard",
+    "de.appplant.cordova.plugin.local-notification",
+    "cordova-plugin-geolocation"
+  ],
+  "cordovaPlatforms": []
 }
