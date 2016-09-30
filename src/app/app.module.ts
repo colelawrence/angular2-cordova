@@ -1,34 +1,100 @@
-import { NgModule, ApplicationRef } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
-import { FormsModule } from '@angular/forms';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import {
+  Component,
+  ViewChild,
+  Params,
+  OnsNavigator,
+  OnsenModule,
+  NgModule, ApplicationRef,
+  CUSTOM_ELEMENTS_SCHEMA
+} from 'angular2-onsenui/src/angular2-onsenui';
 
-import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { AboutComponent } from './about/about.component';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common'
 import { ApiService } from './shared';
-import { routing } from './app.routing';
-
 import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
 
+@Component({
+  selector: 'ons-page',
+  template: `
+    <ons-toolbar>
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">Page {{ currentPage }}</div>
+    </ons-toolbar>
+    <div class="content">
+      <div style="text-align: center; margin: 10px">
+        <ons-button (click)="push()">push</ons-button>
+        <ons-button (click)="pop()">pop</ons-button>
+        <p>Page {{ currentPage }}</p>
+      </div>
+    </div>
+  `
+})
+export class PageComponent {
+  currentPage: number
+
+  constructor(private _navigator: OnsNavigator, private _params: Params) {
+    console.log('parameters:', _params.data)
+    let pageNumberFromData = _params.at("PageNumber")
+    this.currentPage = typeof(pageNumberFromData) === 'number' ? pageNumberFromData : 1
+  }
+
+  push() {
+    this._navigator.element.pushPage(PageComponent, {
+      animation: 'slide',
+      data: { PageNumber: this.currentPage + 1 }
+    })
+  }
+
+  pop() {
+    console.log("Pop from: ", this.currentPage)
+    this._navigator.element.popPage();
+  }
+}
+
+@Component({
+  selector: 'ons-page',
+  template: `
+    <ons-toolbar>
+      <div class="center">Page</div>
+    </ons-toolbar>
+    <div class="content">
+      <div id="message">{{msg}}</div>
+      <div style="text-align: center; margin: 10px">
+        <ons-button (click)="push(navi)">push</ons-button>
+      </div>
+    </div>
+  `
+})
+class DefaultPageComponent {
+  msg = 'Click to push:'
+
+  constructor(private _navigator: OnsNavigator) {
+  }
+
+  push() {
+    this._navigator.element.pushPage(PageComponent, {data: {hoge: "fuga"}});
+  }
+}
+
+@Component({
+  selector: 'my-app',
+  template: `
+  <ons-navigator [page]="page"></ons-navigator>
+  `
+})
+export class AppComponent {
+  page = DefaultPageComponent
+}
+
 @NgModule({
-  imports: [
-    BrowserModule,
-    HttpModule,
-    FormsModule,
-    routing
-  ],
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    AboutComponent
-  ],
+  imports: [OnsenModule],
+  declarations: [AppComponent, DefaultPageComponent, PageComponent],
+  entryComponents: [DefaultPageComponent, PageComponent],
   providers: [
     {provide: LocationStrategy, useClass: HashLocationStrategy},
-    ApiService
+    ApiService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
   constructor(public appRef: ApplicationRef) {}
