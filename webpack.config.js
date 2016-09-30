@@ -94,7 +94,7 @@ module.exports = function makeWebpackConfig() {
    * This handles most of the magic responsible for converting modules
    */
   config.module = {
-    preLoaders: isTest ? [] : [{test: /\.ts$/, loader: 'tslint'}],
+    // preLoaders: isTest ? [] : [{test: /\.ts$/, loader: 'tslint'}],
     loaders: [
       // Support for .ts files.
       {
@@ -192,7 +192,7 @@ module.exports = function makeWebpackConfig() {
       // Extract css files
       // Reference: https://github.com/webpack/extract-text-webpack-plugin
       // Disabled when in test mode or not in build mode
-      new ExtractTextPlugin('css/[name].[hash].css', {disable: !isProd})
+      new ExtractTextPlugin('[name].[hash].css', {disable: !isProd})
     );
   }
 
